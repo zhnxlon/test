@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>火星演唱会打卡 · 2014-2026</title>
+<title>演唱会场次打卡</title>
 <script src="echarts.min.js"></script>
 <style>
   :root{
@@ -109,13 +109,13 @@
 </script>
 
 <header>
-  <h1>火星<span>演唱会打卡</span> 2014-2026</h1>
-  <p>华晨宇演唱会全记录 · 共 <span id="hd-total">100</span> 场</p>
+  <h1><span>演唱会场次</span>打卡 2014-2026</h1>
+  <p>演唱会场次全记录 · 共 <span id="hd-total">100</span> 场</p>
 </header>
 
 <div class="tabs">
   <button class="tab-btn active" data-tab="check">📋 打卡清单</button>
-  <button class="tab-btn" data-tab="map">🗺️ 火星地图</button>
+  <button class="tab-btn" data-tab="map">🗺️ 场次地图</button>
 </div>
 
 <main>
@@ -234,7 +234,7 @@ const CITY_PROV={"北京":"北京","上海":"上海","深圳":"广东","海口":
 SHOWS.forEach(s=>s.prov=CITY_PROV[s.city]||s.city);
 
 /* ============ 状态存储 ============ */
-const KEY="hcy_mars_checkin_v1";
+const KEY="concert_checkin_v1";
 let status={};
 try{status=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){status={}}
 function saveStatus(){localStorage.setItem(KEY,JSON.stringify(status))}
@@ -358,7 +358,7 @@ function renderSummary(){
 
 /* ============ 中国地图 ============ */
 let mapChart=null, geoLoaded=false;
-let posterChart=null, posterDiv=null;   // 海报地图专用独立实例：与火星地图 Tab 解耦，永远默认全貌，不受拖拽缩放影响
+let posterChart=null, posterDiv=null;   // 海报地图专用独立实例：与场次地图 Tab 解耦，永远默认全貌，不受拖拽缩放影响
 const PROV_SHORT=n=>n.replace(/(省|市|特别行政区|壮族自治区|回族自治区|维吾尔自治区|自治区)/g,"");
 const GEO_CENTER={};   // 省份几何中心经纬度 → 用来把弹层锚定到省份边上，而不是点击点
 async function loadGeo(){
@@ -483,9 +483,9 @@ sheetMask.addEventListener("click",closeSheet);
 /* ============ 保存 / 分享打卡海报 ============ */
 /* 临时把隐藏的地图 Tab 显示出来并截图（隐藏态下 #map 高度为0，getDataURL 会空白）
    截图前强制渲染全量着色+默认视图，截完恢复原状态（回放中则恢复回放帧） */
-/* 海报地图：用独立 ECharts 实例渲染，与火星地图 Tab 完全解耦。
+/* 海报地图：用独立 ECharts 实例渲染，与场次地图 Tab 完全解耦。
    该实例 roam:false 且每次 setOption 都用 notMerge，永远渲染默认全貌（含南海诸岛），
-   不受用户在火星 Tab 里的任何拖拽/缩放影响，也不会改回用户在火星 Tab 的当前视图。 */
+   不受用户在场次 Tab 里的任何拖拽/缩放影响，也不会改回用户在场次 Tab 的当前视图。 */
 function getMapThumb(tw,th){
   tw=tw||632; th=th||560;
   if(!geoLoaded) return Promise.resolve(null);
@@ -551,9 +551,9 @@ async function buildPoster(){
   c.textBaseline="alphabetic";c.textAlign="left";
   const tg=c.createLinearGradient(pad,0,pad+360,0);tg.addColorStop(0,"#ff7a45");tg.addColorStop(1,"#ff4d4f");
   c.fillStyle=tg;c.font="bold 52px -apple-system,'PingFang SC','Microsoft YaHei',sans-serif";
-  c.fillText("火星演唱会打卡",pad,110);
+  c.fillText("演唱会场次打卡",pad,110);
   c.fillStyle="#9aa3b5";c.font="22px -apple-system,'PingFang SC',sans-serif";
-  c.fillText("华晨宇 2014–2026 · 共100场 个人观演档案",pad,150);
+  c.fillText("2014–2026 · 共100场 观演档案",pad,150);
   c.fillStyle="#6b7280";c.font="18px sans-serif";c.fillText(new Date().toLocaleDateString("zh-CN"),pad,182);
   // 三张统计卡
   const cardW=(W-pad*2-2*16)/3;
@@ -641,7 +641,7 @@ shareMask.addEventListener("click",e=>{if(e.target===shareMask)shareMask.style.d
 document.getElementById("shareSave").addEventListener("click",()=>{
   const a=document.createElement("a");
   a.href=document.getElementById("shareImg").src;
-  a.download="火星演唱会打卡.png";a.click();
+  a.download="演唱会场次打卡.png";a.click();
 });
 
 /* ============ 全局刷新 ============ */
